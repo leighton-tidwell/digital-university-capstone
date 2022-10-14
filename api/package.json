@@ -8,7 +8,7 @@
   },
   "main": "dist/index.js",
   "scripts": {
-    "build": "babel src/index.js -d dist",
+    "build": "babel --extensions .js,.jsx ./src -d dist",
     "start": "npm run build && node dist/index.js",
     "dev": "nodemon --exec babel-node src/index.js",
     "test": "jest",
