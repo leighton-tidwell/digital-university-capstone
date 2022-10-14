@@ -1,13 +1,20 @@
 import Header from "../Header";
 import Footer from "../Footer";
+import styled from "@emotion/styled";
+
+const StyledLayout = styled.div`
+  display: flex;
+  flex-flow: column;
+  min-height: 100vh;
+`;
 
 const Layout = ({ children }) => {
   return (
-    <div>
+    <StyledLayout>
       <Header />
-      <main>{children}</main>
+      {children}
       <Footer />
-    </div>
+    </StyledLayout>
   );
 };
 

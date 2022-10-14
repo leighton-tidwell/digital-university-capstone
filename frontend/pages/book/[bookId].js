@@ -1,16 +1,101 @@
 import Head from "next/head";
+import styled from "@emotion/styled";
+import { useGetBook } from "../../api/books";
+import { Book as BookCover, Breadcrumbs, Section } from "../../components";
 
-const Book = () => {
+const BookRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 3rem;
+  margin: 0;
+`;
+
+const BookInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0;
+`;
+
+const StyledTitle = styled.h1`
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0;
+  font-family: "IBM Plex Sans", sans-serif;
+`;
+
+const StyledAuthor = styled.p`
+  font-size: 18px;
+  font-weight: 400;
+  margin: 0;
+  font-family: "IBM Plex Sans", sans-serif;
+`;
+
+const StyledDescriptionTitle = styled.h6`
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  font-family: "IBM Plex Sans", sans-serif;
+`;
+
+const StyledDescription = styled.p`
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0;
+  font-family: "IBM Plex Sans", sans-serif;
+  max-width: 700px;
+`;
+
+const Book = ({ bookId }) => {
+  const { bookLoading, bookError, book } = useGetBook(bookId);
+
+  const breadcrumbs = [
+    {
+      title: "Books",
+      href: "/",
+    },
+    {
+      title: book.title,
+      href: `/book/${book.id}`,
+    },
+  ];
+
   return (
-    <div>
+    <>
       <Head>
         <title>Book - Name goes here</title>
         <meta name="description" content="Book detail page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div>Book</div>
-    </div>
+      <Section>
+        <Breadcrumbs links={breadcrumbs} />
+        {!bookLoading && !bookError && (
+          <BookRow>
+            <BookCover coverOnly book={book} />
+            <BookInfo>
+              <StyledTitle>{book.title}</StyledTitle>
+              <StyledAuthor>
+                {book.author.firstName} {book.author.lastName}
+              </StyledAuthor>
+              <StyledDescriptionTitle>Description</StyledDescriptionTitle>
+              <StyledDescription>{book.description}</StyledDescription>
+            </BookInfo>
+          </BookRow>
+        )}
+      </Section>
+    </>
   );
 };
 
 export default Book;
+
+export async function getServerSideProps(context) {
+  const { bookId } = context.params;
+
+  return {
+    props: {
+      bookId,
+    },
+  };
+}

@@ -3,13 +3,14 @@ import { UserAvatar } from "@carbon/icons-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Search from "../Search";
+import Image from "next/image";
 
 const StyledHeader = styled.header`
   background-color: #fff;
   border-bottom: 1px solid #e1e4e8;
   display: flex;
   justify-content: center;
-  padding: 16px 32px;
+  padding: 16px 1rem;
   z-index: 100;
   margin: 0;
 `;
@@ -22,6 +23,13 @@ const StyledHeaderContainer = styled.div`
   max-width: 1240px;
   margin: 0;
   gap: 32px;
+`;
+
+const StyledLogo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
 `;
 
 const StyledTitle = styled.h1`
@@ -57,7 +65,19 @@ const Header = () => {
   return (
     <StyledHeader>
       <StyledHeaderContainer>
-        <StyledTitle>DU Capstone</StyledTitle>
+        <StyledLogo>
+          <Link href="/" passHref>
+            <a>
+              <Image
+                src="/DU-Logo-Mark.svg"
+                alt="DU Capstone"
+                width={45}
+                height={45}
+              />
+            </a>
+          </Link>
+          <StyledTitle>Capstone</StyledTitle>
+        </StyledLogo>
         {links.map((link) => (
           <Link href={link.href} key={link.title} passHref>
             <StyledLink active={pathname === link.href}>
