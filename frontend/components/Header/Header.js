@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { UserAvatar } from "@carbon/icons-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Search from "../Search";
@@ -86,7 +85,6 @@ const Header = () => {
           </Link>
         ))}
         <Search />
-        <UserAvatar size={32} />
       </StyledHeaderContainer>
     </StyledHeader>
   );

@@ -6,7 +6,7 @@ const StyledSection = styled.section`
   align-items: center;
   flex: 1 1 auto;
   padding: 3rem 1rem;
-  background: #dfdfdf;
+  background: #efefef;
   margin: 0;
 `;
 

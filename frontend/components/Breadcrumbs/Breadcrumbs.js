@@ -27,18 +27,18 @@ const StyledLink = styled.a`
 
 const Breadcrumbs = ({ links }) => {
   return (
-    <StyledBreadcrumbs>
+    <div style={{ display: "flex", gap: "0.5rem" }}>
       {links.map((link, index) => (
-        <>
+        <StyledBreadcrumbs key={index}>
           <Link href={link.href} key={link.title} passHref>
             <StyledLink active={links.length - 1 === index}>
               {link.title}
             </StyledLink>
           </Link>
           {links.length - 1 !== index && <span>/</span>}
-        </>
+        </StyledBreadcrumbs>
       ))}
-    </StyledBreadcrumbs>
+    </div>
   );
 };
 
