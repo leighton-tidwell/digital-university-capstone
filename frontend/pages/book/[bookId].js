@@ -1,7 +1,14 @@
+import { useState } from "react";
 import Head from "next/head";
 import styled from "@emotion/styled";
 import { useGetBook } from "../../api/books";
-import { Book as BookCover, Breadcrumbs, Section } from "../../components";
+import {
+  Book as BookCover,
+  Breadcrumbs,
+  RemoveBookModal,
+  Section,
+} from "../../components";
+import { Edit, TrashCan } from "@carbon/icons-react";
 
 const BookRow = styled.div`
   display: flex;
@@ -18,11 +25,59 @@ const BookInfo = styled.div`
   margin: 0;
 `;
 
+const StyledTitleRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin: 0;
+  padding: 0;
+  gap: 1rem;
+`;
+
 const StyledTitle = styled.h1`
   font-size: 28px;
   font-weight: 600;
   margin: 0;
   font-family: "IBM Plex Sans", sans-serif;
+`;
+
+const StyledEditButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #000;
+  border-radius: 0.5rem;
+  background: #fff;
+  color: #000;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: "IBM Plex Sans", sans-serif;
+  cursor: pointer;
+  &:hover {
+    color: #0366d6;
+    border-color: #0366d6;
+  }
+`;
+
+const StyledRemoveButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: none;
+  color: red;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: "IBM Plex Sans", sans-serif;
+  cursor: pointer;
+  &:hover {
+    color: #cd0202;
+  }
 `;
 
 const StyledAuthor = styled.p`
@@ -49,6 +104,7 @@ const StyledDescription = styled.p`
 
 const Book = ({ bookId }) => {
   const { bookLoading, bookError, book } = useGetBook(bookId);
+  const [showRemoveBookModal, setShowRemoveBookModal] = useState(false);
 
   const breadcrumbs = [
     {
@@ -64,8 +120,8 @@ const Book = ({ bookId }) => {
   return (
     <>
       <Head>
-        <title>Book - Name goes here</title>
-        <meta name="description" content="Book detail page" />
+        <title>Book - {book.title}</title>
+        <meta name="description" content={book.description} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Section>
@@ -74,7 +130,19 @@ const Book = ({ bookId }) => {
           <BookRow>
             <BookCover coverOnly book={book} />
             <BookInfo>
-              <StyledTitle>{book.title}</StyledTitle>
+              <StyledTitleRow>
+                <StyledTitle>{book.title}</StyledTitle>
+                <StyledEditButton>
+                  <Edit />
+                  Edit
+                </StyledEditButton>
+                <StyledRemoveButton
+                  onClick={() => setShowRemoveBookModal(true)}
+                >
+                  <TrashCan />
+                  Remove
+                </StyledRemoveButton>
+              </StyledTitleRow>
               <StyledAuthor>
                 {book.author.firstName} {book.author.lastName}
               </StyledAuthor>
@@ -84,6 +152,12 @@ const Book = ({ bookId }) => {
           </BookRow>
         )}
       </Section>
+
+      <RemoveBookModal
+        book={book}
+        isOpen={showRemoveBookModal}
+        onClose={() => setShowRemoveBookModal(false)}
+      />
     </>
   );
 };

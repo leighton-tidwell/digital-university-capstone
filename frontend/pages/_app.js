@@ -5,6 +5,7 @@ import {
   gql,
 } from "@apollo/client";
 import { Layout } from "../components";
+import { ToastProvider } from "../providers";
 import "../styles/global.css";
 
 const App = ({ Component, pageProps }) => {
@@ -18,7 +19,9 @@ const App = ({ Component, pageProps }) => {
   return (
     <ApolloProvider client={client}>
       <Layout>
-        <Component {...pageProps} />
+        <ToastProvider>
+          <Component {...pageProps} />
+        </ToastProvider>
       </Layout>
     </ApolloProvider>
   );

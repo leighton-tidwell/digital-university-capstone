@@ -80,7 +80,7 @@ export const typeDefs = gql`
     "The book's cover image"
     coverImage: String
     "The book's categories (array of IDs)"
-    categories: [Category!]
+    categories: [Category!]!
     "The book's description"
     description: String
   }
@@ -93,7 +93,7 @@ export const typeDefs = gql`
     "The author's last name"
     lastName: String
     "The author's books (array of IDs)"
-    books: [Book!]
+    books: [Book!]!
   }
 
   "An individual category, contains a name and an array of book ids."
@@ -102,7 +102,7 @@ export const typeDefs = gql`
     "The category's name"
     name: String!
     "The category's books (array of IDs)"
-    books: [Book!]
+    books: [Book!]!
   }
 
   type Query {
@@ -122,7 +122,13 @@ export const typeDefs = gql`
 
   type Mutation {
     "Creates a new book"
-    addBook(title: String!, authorId: ID!, categoryIds: [ID!]!): Book
+    addBook(
+      title: String!
+      authorId: String!
+      coverImage: String
+      categoryIds: [String!]!
+      description: String
+    ): Book
     "Updates a book"
     updateBook(
       id: ID!
@@ -170,12 +176,17 @@ export const resolvers = {
       categories.find(category => category.id === id)
   },
   Mutation: {
-    addBook: (_parent, { title, authorId, categoryIds }) => {
+    addBook: (
+      _parent,
+      { title, authorId, coverImage, categoryIds, description }
+    ) => {
       const book = {
         id: String(books.length + 1),
         title,
         author: authorId,
-        categories: categoryIds
+        coverImage: coverImage,
+        categories: categoryIds,
+        description: description
       };
       books.push(book);
       return book;
